@@ -25,8 +25,8 @@ MetaObjectStreamer::MetaObjectStreamer(QObject* obj, const QString& pre, const Q
     streamProperties(metaObject, device);
     streamMethods(metaObject, device);
     streamEnums(metaObject, device);
-
     device->close();
+
 }
 
 

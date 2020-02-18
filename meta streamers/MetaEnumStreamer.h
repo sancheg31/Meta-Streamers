@@ -2,7 +2,6 @@
 
 #include <QMetaEnum>
 #include <QIODevice>
-#include <QScopedPointer>
 
 #include "IMetaStreamer.h"
 
@@ -17,7 +16,8 @@ public:
 
     void stream(QIODevice* device) const override;
 
-    static void stream(const QMetaEnum& metaEnum, QIODevice* device);
+    static void stream(const QMetaEnum& metaEnum, QIODevice* device,
+                       const QString& prefix = "", const QString suffix = "");
 
 signals:
     void enumChanged();

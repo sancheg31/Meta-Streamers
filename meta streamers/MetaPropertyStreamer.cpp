@@ -1,14 +1,19 @@
 #include "MetaPropertyStreamer.h"
 
+#include "MetaEnumStreamer.h"
+#include "MetaMethodStreamer.h"
 
 MetaPropertyStreamer::MetaPropertyStreamer(const QMetaProperty& p, const QString& prefix, const QString& suffix):
-    IMetaStreamer(prefix, suffix), property(p) { }
+    IMetaStreamer(prefix, suffix), property(p) {
+    evaluateMacrosPresence();
+}
 
 void MetaPropertyStreamer::setProperty(const QMetaProperty& p) {
     if (property.name() == p.name() && property.type() == p.type() &&
         property.propertyIndex() == p.propertyIndex())
         return;
     property = p;
+    evaluateMacrosPresence();
     emit propertyChanged();
 }
 
@@ -16,12 +21,40 @@ const QMetaProperty& MetaPropertyStreamer::getProperty() const {
     return property;
 }
 
-void MetaPropertyStreamer::stream(QIODevice* device) const {
-    writeData(device, "meta property streamer\n");
+/*virtual*/ void MetaPropertyStreamer::stream(QIODevice* device) const {
+    const char* pref = prefix.toLocal8Bit().data();
+    const char* suf = suffix.toLocal8Bit().data();
+    writeData(device, pref, "Property: ", suf, "\n");
+    writeData(device, "\t", pref, "type: ", property.typeName(), suf, "\n");
+    writeData(device, "\t", pref, "name: ", property.name(), suf, "\n");
+    if (property.isEnumType())
+        MetaEnumStreamer::stream(property.enumerator(), device, prefix, suffix);
+    for (auto & macros: macrosPresence) {
+        if (macros.first)
+            writeData(device, "\t", pref, "name: ", macros.second, suf, "\n");
+        if (strcmp(macros.second, "NOTIFY") && macros.first == true)
+            MetaMethodStreamer::stream(property.notifySignal(), device, prefix + "\t", suffix + "\t");
+    }
+
 }
 
-void MetaPropertyStreamer::stream(const QMetaProperty& property, QIODevice* device) {
-    MetaPropertyStreamer streamer(property);
+/*static*/ void MetaPropertyStreamer::stream(const QMetaProperty& property, QIODevice* device,
+                                             const QString& prefix, const QString suffix) {
+    MetaPropertyStreamer streamer(property, prefix, suffix);
     streamer.stream(device);
+}
+
+void MetaPropertyStreamer::evaluateMacrosPresence() {
+    macrosPresence.clear();
+    macrosPresence << QPair<bool, const char*>{property.isReadable(), "READ"}
+                   << QPair<bool, const char*>{property.isWritable(), "WRITE"}
+                   << QPair<bool, const char*>{property.isResettable(), "RESET"}
+                   << QPair<bool, const char*>{property.notifySignalIndex()!=-1, "NOTIFY"}
+                   << QPair<bool, const char*>{property.isConstant(), "CONSTANT"}
+                   << QPair<bool, const char*>{property.isFinal(), "FINAL"}
+                   << QPair<bool, const char*>{property.isDesignable(), "DESIGNABLE"}
+                   << QPair<bool, const char*>{property.isScriptable(), "SCRIPTABLE"}
+                   << QPair<bool, const char*>{property.revision(), "REVISION"};
+
 }
 

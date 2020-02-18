@@ -17,12 +17,17 @@ public:
 
     void stream(QIODevice* device) const override;
 
-    static void stream(const QMetaProperty& property, QIODevice* device);
+    static void stream(const QMetaProperty& property, QIODevice* device,
+                       const QString& prefix = "", const QString suffix = "");
 
 signals:
     void propertyChanged();
 
 private:
+
+    void evaluateMacrosPresence();
+
+    QList<QPair<bool, const char*>> macrosPresence;
     QMetaProperty property;
 };
 

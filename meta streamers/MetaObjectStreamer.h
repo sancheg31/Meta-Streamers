@@ -18,7 +18,7 @@ public:
     void stream(QIODevice* device) const override;
 
     static void stream(QObject* object, QIODevice* device,
-                       const QString& prefix = nullptr, const QString suffix = nullptr);
+                       const QString& prefix = "", const QString suffix = "");
 
     void setObject(QObject* object);
     QObject* getObject() const;

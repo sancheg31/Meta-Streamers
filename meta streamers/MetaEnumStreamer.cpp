@@ -13,12 +13,12 @@ const QMetaEnum& MetaEnumStreamer::getEnum() const {
     return metaEnum;
 }
 
-void MetaEnumStreamer::stream(QIODevice* device) const {
+/*virtual*/ void MetaEnumStreamer::stream(QIODevice* device) const {
     writeData(device, "meta enum streamer\n");
 }
 
-void MetaEnumStreamer::stream(const QMetaEnum& metaEnum, QIODevice* device) {
-    MetaEnumStreamer streamer(metaEnum);
+/*static*/ void MetaEnumStreamer::stream(const QMetaEnum& metaEnum, QIODevice* device, const QString& prefix, const QString suffix) {
+    MetaEnumStreamer streamer(metaEnum, prefix, suffix);
     streamer.stream(device);
 }
 

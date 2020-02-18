@@ -3,7 +3,6 @@
 
 #include <QMetaMethod>
 #include <QIODevice>
-#include <QScopedPointer>
 
 #include "IMetaStreamer.h"
 
@@ -18,7 +17,8 @@ public:
 
     void stream(QIODevice* device) const override;
 
-    static void stream(const QMetaMethod& method, QIODevice* device);
+    static void stream(const QMetaMethod& method, QIODevice* device,
+                       const QString& prefix = "", const QString suffix = "");
 
 signals:
     void methodChanged();

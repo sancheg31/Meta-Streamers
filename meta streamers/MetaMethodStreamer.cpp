@@ -4,7 +4,6 @@ MetaMethodStreamer::MetaMethodStreamer(const QMetaMethod& m, const QString& pref
     IMetaStreamer(prefix, suffix), method(m) { }
 
 void MetaMethodStreamer::setMethod(const QMetaMethod& m) {
-
     if (method.methodSignature() == m.methodSignature())
         return;
     method = m;
@@ -15,12 +14,12 @@ const QMetaMethod& MetaMethodStreamer::getMethod() const {
     return method;
 }
 
-void MetaMethodStreamer::stream(QIODevice* device) const {
-    writeData(device, "meta method streamer\n");
+/*virtual*/ void MetaMethodStreamer::stream(QIODevice* device) const {
+    writeData(device, "meta method\n");
 }
 
-void MetaMethodStreamer::stream(const QMetaMethod& method, QIODevice* device) {
-    MetaMethodStreamer streamer(method);
+/*static*/ void MetaMethodStreamer::stream(const QMetaMethod& method, QIODevice* device, const QString& prefix, const QString suffix) {
+    MetaMethodStreamer streamer(method, prefix, suffix);
     streamer.stream(device);
 }
 
