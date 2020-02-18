@@ -1,6 +1,7 @@
 #include "MetaMethodStreamer.h"
 
-MetaMethodStreamer::MetaMethodStreamer(const QMetaMethod& m): QObject(), method(m) { }
+MetaMethodStreamer::MetaMethodStreamer(const QMetaMethod& m, const QString& prefix, const QString& suffix):
+    IMetaStreamer(prefix, suffix), method(m) { }
 
 void MetaMethodStreamer::setMethod(const QMetaMethod& m) {
 
@@ -23,7 +24,3 @@ void MetaMethodStreamer::stream(const QMetaMethod& method, QIODevice* device) {
     streamer.stream(device);
 }
 
-template<typename ...Tp>
-void MetaMethodStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
-}

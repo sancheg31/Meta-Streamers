@@ -34,7 +34,7 @@ private:
     void streamEnums(const QMetaObject* metaObject, QIODevice* device) const;
     void streamClassInfo(const QMetaObject* metaObject, QIODevice* device) const;
 
-    QScopedPointer<QObject> object;
+    QObject* object;
 };
 
 

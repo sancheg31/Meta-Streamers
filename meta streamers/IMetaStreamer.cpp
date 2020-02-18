@@ -24,7 +24,4 @@ const QString& IMetaStreamer::getPrefix() const {
     return prefix;
 }
 
-template<typename ...Tp>
-void IMetaStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
-}
+

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QIODevice>
 
 class IMetaStreamer : public QObject
 {
@@ -19,8 +20,10 @@ public:
     virtual void stream(QIODevice* device) const = 0;
 
 protected:
-    template <typename ...Tp>
-    void writeData(QIODevice* device, Tp ... tp) const;
+    template<typename ...Tp>
+    void writeData(QIODevice* device, Tp ... tp) const {
+        ((device->write(tp), ...));
+    }
 
 signals:
     void suffixChanged();

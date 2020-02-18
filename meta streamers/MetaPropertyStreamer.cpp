@@ -1,7 +1,8 @@
 #include "MetaPropertyStreamer.h"
 
 
-MetaPropertyStreamer::MetaPropertyStreamer(const QMetaProperty& p): property(p) { }
+MetaPropertyStreamer::MetaPropertyStreamer(const QMetaProperty& p, const QString& prefix, const QString& suffix):
+    IMetaStreamer(prefix, suffix), property(p) { }
 
 void MetaPropertyStreamer::setProperty(const QMetaProperty& p) {
     if (property.name() == p.name() && property.type() == p.type() &&
@@ -16,16 +17,11 @@ const QMetaProperty& MetaPropertyStreamer::getProperty() const {
 }
 
 void MetaPropertyStreamer::stream(QIODevice* device) const {
-
+    writeData(device, "meta property streamer\n");
 }
 
 void MetaPropertyStreamer::stream(const QMetaProperty& property, QIODevice* device) {
     MetaPropertyStreamer streamer(property);
     streamer.stream(device);
-}
-
-template<typename ...Tp>
-void MetaPropertyStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
 }
 

@@ -24,10 +24,6 @@ signals:
     void methodChanged();
 
 private:
-
-    template <typename ...Tp>
-    void writeData(QIODevice* device, Tp ... tp) const;
-
     QMetaMethod method;
 };
 

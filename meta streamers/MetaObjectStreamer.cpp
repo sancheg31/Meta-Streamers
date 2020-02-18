@@ -6,17 +6,16 @@
 
 MetaObjectStreamer::MetaObjectStreamer(QObject* obj, const QString& pre, const QString& suf): IMetaStreamer(pre, suf), object(obj) { }
 
-
 /*static*/ void MetaObjectStreamer::stream(QObject* object, QIODevice* device, const QString& prefix, const QString suffix) {
     MetaObjectStreamer streamer(object, prefix, suffix);
     streamer.stream(device);
 }
 
-void MetaObjectStreamer::stream(QIODevice* device) const {
+/*virtual*/ void MetaObjectStreamer::stream(QIODevice* device) const {
     if (device->isOpen())
         device->close();
 
-    device->open(QIODevice::OpenModeFlag::Text | QIODevice::OpenModeFlag::WriteOnly);
+    device->open(QIODevice::Text | QIODevice::WriteOnly);
     if (!device->isOpen())
         return;
 
@@ -30,10 +29,7 @@ void MetaObjectStreamer::stream(QIODevice* device) const {
     device->close();
 }
 
-template<typename ...Tp>
-void MetaObjectStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
-}
+
 
 void MetaObjectStreamer::streamClassDetails(const QMetaObject* metaObject, QIODevice* device) const {
     writeData(device, "class: ", metaObject->className(), "\n");
@@ -62,17 +58,15 @@ void MetaObjectStreamer::streamClassInfo(const QMetaObject* metaObject, QIODevic
     for (int i = metaObject->classInfoOffset(); i < metaObject->classInfoCount(); ++i);
 }
 
-
 void MetaObjectStreamer::setObject(QObject* obj) {
-    if (object.data() != obj) {
-        object.take();
-        object.reset(obj);
-        emit objectChanged();
-    }
+    if (object == obj)
+        return;
+    object = obj;
+    emit objectChanged();
 }
 
 QObject* MetaObjectStreamer::getObject() const {
-    return object.data();
+    return object;
 }
 
 

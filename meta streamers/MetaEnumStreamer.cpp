@@ -22,8 +22,4 @@ void MetaEnumStreamer::stream(const QMetaEnum& metaEnum, QIODevice* device) {
     streamer.stream(device);
 }
 
-template<typename ...Tp>
-void MetaEnumStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
-}
 
