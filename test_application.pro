@@ -23,7 +23,8 @@ SOURCES += \
     "meta streamers/MetaEnumStreamer.cpp" \
     "meta streamers/MetaMethodStreamer.cpp" \
     "meta streamers/MetaPropertyStreamer.cpp" \
-    "meta streamers/MetaTypeStreamer.cpp"
+    "meta streamers/MetaTypeStreamer.cpp" \
+    "meta streamers/IMetaStreamer.cpp"
 
 HEADERS += \
     Counter.h \
@@ -34,6 +35,7 @@ HEADERS += \
     "meta streamers/MetaMethodStreamer.h" \
     "meta streamers/MetaPropertyStreamer.h" \
     "meta streamers/MetaTypeStreamer.h" \
+    "meta streamers/IMetaStreamer.h" \
     pch.h
 
 # Default rules for deployment.
