@@ -5,11 +5,9 @@
 #include <QScopedPointer>
 
 #include "IMetaStreamer.h"
-#include "MetaEnumStreamer.h"
-#include "MetaMethodStreamer.h"
-#include "MetaPropertyStreamer.h"
 
-class MetaObjectStreamer : public QObject
+
+class MetaObjectStreamer : public IMetaStreamer
 {
     Q_OBJECT
     Q_PROPERTY(QObject* object READ getObject WRITE setObject NOTIFY objectChanged);
@@ -17,7 +15,7 @@ class MetaObjectStreamer : public QObject
 public:
     explicit MetaObjectStreamer(QObject* object, const QString& prefix = "", const QString& suffix = "");
 
-    void stream(QIODevice* device) const;
+    void stream(QIODevice* device) const override;
 
     static void stream(QObject* object, QIODevice* device,
                        const QString& prefix = nullptr, const QString suffix = nullptr);
@@ -35,9 +33,6 @@ private:
     void streamProperties(const QMetaObject* metaObject, QIODevice* device) const;
     void streamEnums(const QMetaObject* metaObject, QIODevice* device) const;
     void streamClassInfo(const QMetaObject* metaObject, QIODevice* device) const;
-
-    template <typename ...Tp>
-    void writeData(QIODevice* device, Tp ... tp) const;
 
     QScopedPointer<QObject> object;
 };

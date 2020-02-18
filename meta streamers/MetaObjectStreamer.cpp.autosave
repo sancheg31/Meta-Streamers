@@ -30,10 +30,7 @@ void MetaObjectStreamer::stream(QIODevice* device) const {
     device->close();
 }
 
-template<typename ...Tp>
-void MetaObjectStreamer::writeData(QIODevice* device, Tp ... tp) const {
-    ((device->write(tp), ...));
-}
+
 
 void MetaObjectStreamer::streamClassDetails(const QMetaObject* metaObject, QIODevice* device) const {
     writeData(device, "class: ", metaObject->className(), "\n");

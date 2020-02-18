@@ -1,26 +1,30 @@
 #include "IMetaStreamer.h"
 
-MetaStreamer::MetaStreamer(QString suf= "", QString pref = ""): QObject(), suffix(suf), prefix(pref) { }
+IMetaStreamer::IMetaStreamer(const QString& pref, const QString& suf): QObject(), prefix(pref), suffix(suf) { }
 
-
-void MetaObjectStreamer::setSuffix(const QString& s) {
+void IMetaStreamer::setSuffix(const QString& s) {
     if (s != suffix) {
         suffix = s;
         emit suffixChanged();
     }
 }
 
-const QString& MetaObjectStreamer::getSuffix() const {
+const QString& IMetaStreamer::getSuffix() const {
     return suffix;
 }
 
-void MetaObjectStreamer::setPrefix(const QString& p) {
+void IMetaStreamer::setPrefix(const QString& p) {
     if (p != prefix) {
         prefix = p;
         emit prefixChanged();
     }
 }
 
-const QString& MetaObjectStreamer::getPrefix() const {
+const QString& IMetaStreamer::getPrefix() const {
     return prefix;
+}
+
+template<typename ...Tp>
+void IMetaStreamer::writeData(QIODevice* device, Tp ... tp) const {
+    ((device->write(tp), ...));
 }

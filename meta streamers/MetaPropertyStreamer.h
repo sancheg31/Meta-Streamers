@@ -3,18 +3,19 @@
 #include <QObject>
 #include <QMetaProperty>
 #include <QIODevice>
-#include <QScopedPointer>
 
-class MetaPropertyStreamer : public QObject
+#include "IMetaStreamer.h"
+
+class MetaPropertyStreamer : public IMetaStreamer
 {
     Q_OBJECT
 public:
-    explicit MetaPropertyStreamer(const QMetaProperty& property);
+    explicit MetaPropertyStreamer(const QMetaProperty& property, const QString& prefix = "", const QString& suffix = "");
 
     void setProperty(const QMetaProperty& property);
-
     const QMetaProperty& getProperty() const;
-    void stream(QIODevice* device) const;
+
+    void stream(QIODevice* device) const override;
 
     static void stream(const QMetaProperty& property, QIODevice* device);
 
@@ -22,9 +23,6 @@ signals:
     void propertyChanged();
 
 private:
-    template <typename ...Tp>
-    void writeData(QIODevice* device, Tp ... tp) const;
-
     QMetaProperty property;
 };
 
