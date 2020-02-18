@@ -25,12 +25,12 @@ protected:
         ((device->write(tp), ...));
     }
 
+    QString prefix;
+    QString suffix;
+
 signals:
     void suffixChanged();
     void prefixChanged();
 
-private:
-    QString prefix;
-    QString suffix;
 };
 

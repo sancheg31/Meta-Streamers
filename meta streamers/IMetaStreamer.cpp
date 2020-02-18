@@ -3,10 +3,10 @@
 IMetaStreamer::IMetaStreamer(const QString& pref, const QString& suf): QObject(), prefix(pref), suffix(suf) { }
 
 void IMetaStreamer::setSuffix(const QString& s) {
-    if (s != suffix) {
-        suffix = s;
-        emit suffixChanged();
-    }
+    if (s == suffix)
+        return;
+    suffix = s;
+    emit suffixChanged();
 }
 
 const QString& IMetaStreamer::getSuffix() const {
@@ -14,10 +14,11 @@ const QString& IMetaStreamer::getSuffix() const {
 }
 
 void IMetaStreamer::setPrefix(const QString& p) {
-    if (p != prefix) {
-        prefix = p;
-        emit prefixChanged();
-    }
+    if (p == prefix)
+        return;
+
+    prefix = p;
+    emit prefixChanged();
 }
 
 const QString& IMetaStreamer::getPrefix() const {

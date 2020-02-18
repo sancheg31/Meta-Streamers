@@ -32,10 +32,12 @@ MetaObjectStreamer::MetaObjectStreamer(QObject* obj, const QString& pre, const Q
 
 
 void MetaObjectStreamer::streamClassDetails(const QMetaObject* metaObject, QIODevice* device) const {
-    writeData(device, "class: ", metaObject->className(), "\n");
+    const char* pref = prefix.toLocal8Bit().data();
+    const char* suf = suffix.toLocal8Bit().data();
+    writeData(device, pref, "class: ", metaObject->className(), suf, "\n");
     const QMetaObject* superClass = metaObject->superClass();
     if (superClass != nullptr) {
-        writeData(device, "superclass: ", superClass->className(), "\n");
+        writeData(device, pref, "superclass: ", superClass->className(), suf, "\n");
     }
 }
 
