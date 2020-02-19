@@ -22,24 +22,27 @@ const QMetaProperty& MetaPropertyStreamer::getProperty() const {
 }
 
 /*virtual*/ void MetaPropertyStreamer::stream(QIODevice* device) const {
-    const char* pref = prefix.toLocal8Bit().data();
-    const char* suf = suffix.toLocal8Bit().data();
-    writeData(device, pref, "Property: ", suf, "\n");
-    writeData(device, "\t", pref, "type: ", property.typeName(), suf, "\n");
-    writeData(device, "\t", pref, "name: ", property.name(), suf, "\n");
-    if (property.isEnumType())
-        MetaEnumStreamer::stream(property.enumerator(), device, prefix, suffix);
-    for (auto & macros: macrosPresence) {
+    writeData(device, prefix.toLocal8Bit().data(), "Property: ", suffix.toLocal8Bit().data(), "\n");
+    writeData(device, "\t", prefix.toLocal8Bit().data(), "type: ", property.typeName(), suffix.toLocal8Bit().data(), "\n");
+    writeData(device, "\t", prefix.toLocal8Bit().data(), "name: ", property.name(), suffix.toLocal8Bit().data(), "\n");
+    if (property.isEnumType()) {
+        writeData(device, "\t", prefix.toLocal8Bit().data(), "enum: ", suffix.toLocal8Bit().data(), "\n");
+        MetaEnumStreamer::stream(property.enumerator(), device, prefix + "\t", suffix);
+    }
+    for (const auto & macros: macrosPresence) {
         if (macros.first)
-            writeData(device, "\t", pref, "name: ", macros.second, suf, "\n");
-        if (strcmp(macros.second, "NOTIFY") && macros.first == true)
-            MetaMethodStreamer::stream(property.notifySignal(), device, prefix + "\t", suffix + "\t");
+            writeData(device, "\t", prefix.toLocal8Bit().data(), macros.second, suffix.toLocal8Bit().data(), "\n");
+        qDebug() << "t" << prefix.toLocal8Bit().data() << "t" << macros.second << "t" << suffix.toLocal8Bit().data() << "t";
+        if ((strcmp(macros.second, "NOTIFY") == 0) && macros.first == true) {
+            MetaMethodStreamer::stream(property.notifySignal(), device, prefix + "\t", suffix);
+        }
+        qDebug() << "t" << prefix.toLocal8Bit().data() << "t" << macros.second << "t" << suffix.toLocal8Bit().data() << "t";
     }
 
 }
 
 /*static*/ void MetaPropertyStreamer::stream(const QMetaProperty& property, QIODevice* device,
-                                             const QString& prefix, const QString suffix) {
+                                             const QString& prefix, const QString& suffix) {
     MetaPropertyStreamer streamer(property, prefix, suffix);
     streamer.stream(device);
 }

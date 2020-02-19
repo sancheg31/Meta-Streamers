@@ -18,12 +18,18 @@ public:
     void stream(QIODevice* device) const override;
 
     static void stream(const QMetaMethod& method, QIODevice* device,
-                       const QString& prefix = "", const QString suffix = "");
+                       QString prefix = "", QString suffix = "");
 
 signals:
     void methodChanged();
 
 private:
+
+    void createAccessTranslation();
+    void createMethodTypeTranslation();
+
+    QHash<QMetaMethod::Access, const char*> accessTranslation;
+    QHash<QMetaMethod::MethodType, const char*> methodTypeTranslation;
     QMetaMethod method;
 };
 

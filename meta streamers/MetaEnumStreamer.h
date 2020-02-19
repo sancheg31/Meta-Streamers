@@ -17,7 +17,7 @@ public:
     void stream(QIODevice* device) const override;
 
     static void stream(const QMetaEnum& metaEnum, QIODevice* device,
-                       const QString& prefix = "", const QString suffix = "");
+                       const QString& prefix = "", const QString& suffix = "");
 
 signals:
     void enumChanged();

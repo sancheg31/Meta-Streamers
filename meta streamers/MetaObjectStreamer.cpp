@@ -6,7 +6,7 @@
 
 MetaObjectStreamer::MetaObjectStreamer(QObject* obj, const QString& pre, const QString& suf): IMetaStreamer(pre, suf), object(obj) { }
 
-/*static*/ void MetaObjectStreamer::stream(QObject* object, QIODevice* device, const QString& prefix, const QString suffix) {
+/*static*/ void MetaObjectStreamer::stream(QObject* object, QIODevice* device, const QString& prefix, const QString& suffix) {
     MetaObjectStreamer streamer(object, prefix, suffix);
     streamer.stream(device);
 }
@@ -43,17 +43,17 @@ void MetaObjectStreamer::streamClassDetails(const QMetaObject* metaObject, QIODe
 
 void MetaObjectStreamer::streamMethods(const QMetaObject* metaObject, QIODevice* device) const {
     for (int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
-        MetaMethodStreamer::stream(metaObject->method(i), device);
+        MetaMethodStreamer::stream(metaObject->method(i), device, "\t");
 }
 
 void MetaObjectStreamer::streamProperties(const QMetaObject* metaObject, QIODevice* device) const {
     for (int i = metaObject->propertyOffset(); i < metaObject->propertyCount(); ++i)
-        MetaPropertyStreamer::stream(metaObject->property(i), device);
+        MetaPropertyStreamer::stream(metaObject->property(i), device, "\t");
 }
 
 void MetaObjectStreamer::streamEnums(const QMetaObject* metaObject, QIODevice* device) const {
     for (int i = metaObject->enumeratorOffset(); i < metaObject->enumeratorCount(); ++i)
-        MetaEnumStreamer::stream(metaObject->enumerator(i), device);
+        MetaEnumStreamer::stream(metaObject->enumerator(i), device, "\t");
 }
 
 void MetaObjectStreamer::streamClassInfo(const QMetaObject* metaObject, QIODevice* device) const {

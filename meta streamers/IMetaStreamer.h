@@ -22,7 +22,7 @@ public:
 protected:
     template<typename ...Tp>
     void writeData(QIODevice* device, Tp ... tp) const {
-        ((device->write(tp), ...));
+        ((device->write(tp)), ...);
     }
 
     QString prefix;
